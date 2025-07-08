@@ -1,64 +1,32 @@
-# Sistema de Gestão - Crédito Rural
+# Sistema de Crédito Rural
 
-Sistema web para gestão de clientes e processos de crédito rural, com suporte a múltiplos bancos e linhas de crédito.
+Este é um sistema de gerenciamento de clientes para crédito rural, desenvolvido em HTML, CSS e JavaScript puro.
 
-## Funcionalidades
+## Deploy Automático
 
-- Cadastro e gestão de clientes
-- Gestão de propriedades rurais
-- Acompanhamento de status de processos
-- Geração de relatórios
-- Filtros avançados
-- Suporte a modo escuro
-- Armazenamento local dos dados
+O sistema está publicado automaticamente via **GitHub Pages**. Toda alteração feita na branch `main` é publicada em:
 
-## Requisitos
+👉 [Acesse o sistema online](https://zeusnetai.github.io/painelgerenciamento/)
 
-- Node.js 14.x ou superior
-- Navegador web moderno (Chrome, Firefox, Edge)
-
-## Instalação
+## Como usar localmente
 
 1. Clone o repositório:
-```bash
-git clone [url-do-repositorio]
-cd sistema-credito-rural
-```
+   ```bash
+   git clone https://github.com/ZeusnetAi/painelgerenciamento.git
+   ```
+2. Abra o arquivo `index.html` no seu navegador.
 
-2. Instale as dependências:
-```bash
-npm install
-```
-
-3. Inicie o servidor de desenvolvimento:
-```bash
-npm start
-```
-
-4. Acesse o sistema no navegador:
-```
-http://localhost:3000
-```
-
-## Tecnologias Utilizadas
-
+## Tecnologias
 - HTML5
-- CSS3 (com variáveis CSS para temas)
-- JavaScript (ES6+)
-- Local Storage para persistência de dados
-- date-fns para manipulação de datas
+- CSS3
+- JavaScript
 
-## Estrutura do Projeto
+## Como contribuir
+1. Faça um fork do projeto
+2. Crie uma branch: `git checkout -b minha-feature`
+3. Faça suas alterações e dê commit: `git commit -m 'Minha contribuição'`
+4. Dê push: `git push origin minha-feature`
+5. Abra um Pull Request
 
-- `index.html` - Estrutura da página principal
-- `style.css` - Estilos e temas (claro/escuro)
-- `app.js` - Lógica da aplicação
-- `package.json` - Configuração e dependências
-
-## Contribuição
-
-1. Faça o fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request 
+---
+Desenvolvido por ZeusnetAi 
