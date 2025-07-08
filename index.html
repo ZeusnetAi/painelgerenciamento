@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Gestão de Crédito Rural - Gerencie clientes, propriedades e processos de crédito rural">
+    <meta name="theme-color" content="#21808D">
+    <title>Sistema de Gestão - Crédito Rural</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="header-title">Sistema de Gestão - Crédito Rural</h1>
+                <div class="header-actions">
+                    <button class="btn btn--danger" id="resetarSistemaBtn">Resetar Sistema</button>
+                    <button class="btn btn--primary" id="novoClienteBtn">+ Novo Cliente</button>
+                    <button class="btn btn--secondary" id="relatoriosBtn">Relatórios</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- KPIs -->
+            <section class="kpis">
+                <div class="kpi-card">
+                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-content">
+                        <h3 class="kpi-title">Total de Clientes</h3>
+                        <p class="kpi-value" id="totalClientes">0</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">⏳</div>
+                    <div class="kpi-content">
+                        <h3 class="kpi-title">Em Andamento</h3>
+                        <p class="kpi-value" id="clientesAndamento">0</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">✅</div>
+                    <div class="kpi-content">
+                        <h3 class="kpi-title">Aprovados</h3>
+                        <p class="kpi-value" id="clientesAprovados">0</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🌾</div>
+                    <div class="kpi-content">
+                        <h3 class="kpi-title">Plano Safra</h3>
+                        <p class="kpi-value">2025/2026</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filtros -->
+            <section class="filters">
+                <div class="filter-group">
+                    <label class="form-label">Plano Safra</label>
+                    <select class="form-control" id="filtroPlanoSafra">
+                        <option value="">Todos</option>
+                        <option value="2025/2026" selected>2025/2026</option>
+                        <option value="2024/2025">2024/2025</option>
+                        <option value="2023/2024">2023/2024</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="form-label">Banco</label>
+                    <select class="form-control" id="filtroBanco">
+                        <option value="">Todos</option>
+                        <option value="Banco do Brasil">Banco do Brasil</option>
+                        <option value="SICREDI">SICREDI</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-control" id="filtroStatus">
+                        <option value="">Todos</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Rejeitado">Rejeitado</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="form-label">Buscar</label>
+                    <input type="text" class="form-control" id="filtroTexto" placeholder="Nome ou CPF">
+                </div>
+            </section>
+
+            <!-- Tabela de Clientes -->
+            <section class="clientes-section">
+                <div class="table-container">
+                    <table class="table" id="tabelaClientes">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Banco</th>
+                                <th>Status</th>
+                                <th>Plano Safra</th>
+                                <th>Tipo Produtor</th>
+                                <th>Data Início</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaClientesBody">
+                            <!-- Clientes serão inseridos aqui -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal Novo Cliente -->
+    <div class="modal" id="modalNovoCliente">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Novo Cliente</h2>
+                <button class="modal-close" id="closeModalCliente">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formNovoCliente">
+                    <input type="hidden" id="clienteIdEdicao">
+                    <!-- Dados Básicos -->
+                    <div class="form-section">
+                        <h3>Dados Básicos</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="nomeCliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CPF</label>
+                                <input type="text" class="form-control" id="cpfCliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input type="text" class="form-control" id="telefoneCliente">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailCliente">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Banco</label>
+                                <select class="form-control" id="bancoCliente" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Banco do Brasil">Banco do Brasil</option>
+                                    <option value="SICREDI">SICREDI</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Empreendimento</label>
+                                <select class="form-control" id="tipoEmpreendimento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Pecuária">Pecuária</option>
+                                    <option value="Agricultura">Agricultura</option>
+                                    <option value="Piscicultura">Piscicultura</option>
+                                    <option value="Apicultura">Apicultura</option>
+                                    <option value="Agroflorestal">Agroflorestal</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Propriedades -->
+                    <div class="form-section">
+                        <h3>Propriedades</h3>
+                        <div id="propriedadesContainer">
+                            <div class="propriedade-item">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Nome da Propriedade</label>
+                                        <input type="text" class="form-control propriedade-nome" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Área (hectares)</label>
+                                        <input type="number" class="form-control propriedade-area" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Município</label>
+                                        <input type="text" class="form-control propriedade-municipio" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Estado</label>
+                                        <select class="form-control propriedade-estado" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="SP">São Paulo</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Módulos Fiscais (hectares)</label>
+                                        <input type="number" class="form-control propriedade-modulos" value="75" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Classificação</label>
+                                        <input type="text" class="form-control propriedade-classificacao" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Recibo do CAR</label>
+                                        <input type="text" class="form-control propriedade-car" placeholder="Número do Recibo do CAR">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn--secondary" id="adicionarPropriedade">+ Adicionar Propriedade</button>
+                    </div>
+
+                    <!-- Informações do Produtor -->
+                    <div class="form-section">
+                        <h3>Informações do Produtor</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Data de Início</label>
+                                <input type="date" class="form-control" id="dataInicioCliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" id="statusCliente" required>
+                                    <option value="Em andamento">Em andamento</option>
+                                    <option value="Aprovado">Aprovado</option>
+                                    <option value="Rejeitado">Rejeitado</option>
+                                    <option value="Documentação Pendente">Documentação Pendente</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Produtor</label>
+                                <select class="form-control" id="tipoProdutor" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Pronaf">Pronaf</option>
+                                    <option value="Pronamp">Pronamp</option>
+                                    <option value="Grande Produtor">Grande Produtor</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Sistema de Produção</label>
+                                <select class="form-control" id="sistemaProducao">
+                                    <option value="">Selecione...</option>
+                                    <option value="Extensivo">Extensivo</option>
+                                    <option value="Semi-intensivo">Semi-intensivo</option>
+                                    <option value="Intensivo">Intensivo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Rotação de Pastagem</label>
+                                <select class="form-control" id="rotacaoPastagem">
+                                    <option value="">Selecione...</option>
+                                    <option value="true">Sim</option>
+                                    <option value="false">Não</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Plano Safra</label>
+                                <select class="form-control" id="planoSafraCliente" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="2025/2026" selected>2025/2026</option>
+                                    <option value="2024/2025">2024/2025</option>
+                                    <option value="2023/2024">2023/2024</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fontes de Renda</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" value="Agricultura"> Agricultura</label>
+                                <label><input type="checkbox" value="Pecuária"> Pecuária</label>
+                                <label><input type="checkbox" value="Prestação de serviços"> Prestação de serviços</label>
+                                <label><input type="checkbox" value="Aposentadoria"> Aposentadoria</label>
+                                <label><input type="checkbox" value="Arrendamento"> Arrendamento</label>
+                                <label><input type="checkbox" value="Outras"> Outras</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fontes de Renda -->
+                    <div class="form-section">
+                        <h3>Fontes de Renda</h3>
+                        <div class="form-grid">
+                            <div class="form-group" style="flex:2;">
+                                <label class="form-label">Nova Fonte de Renda</label>
+                                <input type="text" class="form-control" id="novaFonteRenda" placeholder="Ex: Agricultura, Pecuária, Arrendamento...">
+                            </div>
+                            <div class="form-group" style="flex:1;align-self:end;">
+                                <button type="button" class="btn btn--secondary" id="adicionarFonteRenda">Adicionar Fonte</button>
+                            </div>
+                        </div>
+                        <ul id="listaFontesRenda" style="margin-top:10px;"></ul>
+                    </div>
+
+                    <!-- Observações -->
+                    <div class="form-section">
+                        <h3>Observações</h3>
+                        <textarea class="form-control" id="observacoesCliente" rows="3" placeholder="Digite observações gerais sobre o cliente..."></textarea>
+                    </div>
+
+                    <!-- Impedimentos -->
+                    <div class="form-section">
+                        <h3>Pendências / Impedimentos</h3>
+                        <div class="form-grid">
+                            <div class="form-group" style="flex:2;">
+                                <label class="form-label">Motivo da Pendência</label>
+                                <input type="text" class="form-control" id="novoImpedimentoMotivo" placeholder="Ex: Tamanho da área incompatível, documentação pendente...">
+                            </div>
+                            <div class="form-group" style="flex:1;align-self:end;">
+                                <button type="button" class="btn btn--secondary" id="adicionarImpedimento">Adicionar Pendência</button>
+                            </div>
+                        </div>
+                        <ul id="listaImpedimentos" style="margin-top:10px;"></ul>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--secondary" id="cancelarCliente">Cancelar</button>
+                        <button type="submit" class="btn btn--primary">Salvar Cliente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Relatórios -->
+    <div class="modal" id="modalRelatorios">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Relatórios</h2>
+                <button class="modal-close" id="closeModalRelatorios">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="relatorio-options">
+                    <div class="relatorio-item">
+                        <h3>Relatório de Clientes</h3>
+                        <div class="relatorio-buttons">
+                            <button class="btn btn--secondary" onclick="gerarRelatorio('todos')">Todos os Clientes</button>
+                            <button class="btn btn--secondary" onclick="gerarRelatorio('emAndamento')">Em Andamento</button>
+                            <button class="btn btn--secondary" onclick="gerarRelatorio('aprovados')">Aprovados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "sistema-credito-rural",
+  "version": "1.0.0",
+  "description": "Sistema de Gestão de Crédito Rural",
+  "main": "app.js",
+  "scripts": {
+    "start": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "credito-rural",
+    "agricultura",
+    "gestao"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+} 
