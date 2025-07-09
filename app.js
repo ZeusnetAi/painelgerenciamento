@@ -701,9 +701,11 @@ class CreditoRuralSystem {
                         <td>${this.formatDate(cliente.dataInicio)}</td>
                         <td class="actions">
                             <button class="btn btn--xs btn--secondary" onclick="creditoRuralSystem.editCliente(${cliente.id})">
+                                <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' style='vertical-align:middle;margin-right:4px;'><path d='M4 21h17' stroke='#21808D' stroke-width='2' stroke-linecap='round'/><path d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5Z' stroke='#21808D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>
                                 Editar
                             </button>
                             <button class="btn btn--xs btn--outline" onclick="creditoRuralSystem.deleteCliente(${cliente.id})">
+                                <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' style='vertical-align:middle;margin-right:4px;'><rect x='3' y='6' width='18' height='14' rx='2' stroke='#dc143c' stroke-width='2'/><path d='M8 10v6M12 10v6M16 10v6' stroke='#dc143c' stroke-width='2' stroke-linecap='round'/><path d='M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2' stroke='#dc143c' stroke-width='2'/></svg>
                                 Excluir
                             </button>
                         </td>
