@@ -1344,3 +1344,103 @@ select.form-control {
 #tabelaClientes tr:hover {
     background: #f0f8fa;
 }
+
+/* Modernização de botões */
+.btn {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  padding: 0.75em 2em;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+.btn:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Modernização de tabelas */
+.table {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+  background: var(--color-surface);
+}
+.table th, .table td {
+  padding: 1em 1.5em;
+  font-size: var(--font-size-base);
+}
+.table th {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  font-weight: var(--font-weight-bold);
+}
+.table tbody tr {
+  transition: background 0.15s;
+}
+.table tbody tr:hover {
+  background: var(--color-secondary-hover);
+}
+
+/* Modernização de modais */
+.modal-content {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 2.5em 2em;
+  background: var(--color-surface);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.modal.active .modal-content {
+  transform: translateY(-10px) scale(1.01);
+}
+
+/* Modernização de formulários */
+.form-control {
+  border-radius: var(--radius-base);
+  padding: 0.75em 1em;
+  font-size: var(--font-size-base);
+  box-shadow: var(--shadow-xs);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* Espaçamento geral */
+.container {
+  padding: 2em 1em;
+}
+.header, .main {
+  margin-bottom: 2em;
+}
+.kpis {
+  gap: 2em;
+  margin-bottom: 2em;
+}
+.kpi-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5em 2em;
+  background: var(--color-surface);
+}
+
+/* Responsividade aprimorada */
+@media (max-width: 768px) {
+  .header-content, .kpis, .filters, .clientes-section, .form-grid {
+    flex-direction: column !important;
+    gap: 1em !important;
+  }
+  .table th, .table td {
+    padding: 0.5em 0.5em;
+    font-size: var(--font-size-sm);
+  }
+  .modal-content {
+    padding: 1em 0.5em;
+  }
+}
+
+/* Pequenas animações */
+.btn, .modal-content, .kpi-card, .table {
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
