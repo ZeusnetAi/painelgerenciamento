@@ -657,47 +657,64 @@ class CreditoRuralSystem {
 
     updateClientesTable() {
         const tbody = document.getElementById('tabelaClientesBody');
-        const clientes = this.getFilteredClientes();
-        
-        if (clientes.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="8" class="empty-state">
-                        <h3>Nenhum cliente encontrado</h3>
-                        <p>Tente ajustar os filtros ou adicione um novo cliente</p>
-                    </td>
-                </tr>
-            `;
-            return;
+        const tableContainer = document.querySelector('.table-container');
+        // Adiciona loading visual
+        if (tableContainer && !tableContainer.querySelector('.loading')) {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.innerHTML = 'Carregando...';
+            loadingDiv.style.position = 'absolute';
+            loadingDiv.style.left = '50%';
+            loadingDiv.style.top = '50%';
+            loadingDiv.style.transform = 'translate(-50%, -50%)';
+            loadingDiv.style.zIndex = '10';
+            tableContainer.style.position = 'relative';
+            tableContainer.appendChild(loadingDiv);
         }
-
-        tbody.innerHTML = clientes.map(cliente => {
-            let bancoLogo = '';
-            if (cliente.banco === 'Banco do Brasil') {
-                bancoLogo = '<img src="assets/bb.png" alt="Banco do Brasil" class="banco-logo">';
-            } else if (cliente.banco === 'SICREDI') {
-                bancoLogo = '<img src="assets/sicredi.png" alt="Sicredi" class="banco-logo">';
+        setTimeout(() => {
+            const clientes = this.getFilteredClientes();
+            if (clientes.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <h3>Nenhum cliente encontrado</h3>
+                            <p>Tente ajustar os filtros ou adicione um novo cliente</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = clientes.map(cliente => {
+                    let bancoLogo = '';
+                    if (cliente.banco === 'Banco do Brasil') {
+                        bancoLogo = '<img src="assets/bb.png" alt="Banco do Brasil" class="banco-logo">';
+                    } else if (cliente.banco === 'SICREDI') {
+                        bancoLogo = '<img src="assets/sicredi.png" alt="Sicredi" class="banco-logo">';
+                    }
+                    return `
+                    <tr>
+                        <td>${cliente.nome}</td>
+                        <td>${cliente.cpf}</td>
+                        <td>${bancoLogo} <span class="banco-nome">${cliente.banco}</span></td>
+                        <td><span class="status ${cliente.status.toLowerCase().replace(/\s+/g, '-')}">${cliente.status}</span></td>
+                        <td>${cliente.planoSafra}</td>
+                        <td>${cliente.tipoProdutor}</td>
+                        <td>${this.formatDate(cliente.dataInicio)}</td>
+                        <td class="actions">
+                            <button class="btn btn--xs btn--secondary" onclick="creditoRuralSystem.editCliente(${cliente.id})">
+                                Editar
+                            </button>
+                            <button class="btn btn--xs btn--outline" onclick="creditoRuralSystem.deleteCliente(${cliente.id})">
+                                Excluir
+                            </button>
+                        </td>
+                    </tr>
+                    `;
+                }).join('');
             }
-            return `
-            <tr>
-                <td>${cliente.nome}</td>
-                <td>${cliente.cpf}</td>
-                <td>${bancoLogo} <span class="banco-nome">${cliente.banco}</span></td>
-                <td><span class="status ${cliente.status.toLowerCase().replace(/\s+/g, '-')}">${cliente.status}</span></td>
-                <td>${cliente.planoSafra}</td>
-                <td>${cliente.tipoProdutor}</td>
-                <td>${this.formatDate(cliente.dataInicio)}</td>
-                <td class="actions">
-                    <button class="btn btn--xs btn--secondary" onclick="creditoRuralSystem.editCliente(${cliente.id})">
-                        Editar
-                    </button>
-                    <button class="btn btn--xs btn--outline" onclick="creditoRuralSystem.deleteCliente(${cliente.id})">
-                        Excluir
-                    </button>
-                </td>
-            </tr>
-            `;
-        }).join('');
+            // Remove loading visual
+            const loading = tableContainer.querySelector('.loading');
+            if (loading) loading.remove();
+        }, 250); // Simula carregamento rápido
     }
 
     getFilteredClientes() {
@@ -818,20 +835,28 @@ class CreditoRuralSystem {
         const notification = document.createElement('div');
         notification.className = `notification notification--${type}`;
         notification.textContent = message;
-        
+        notification.style.cursor = 'pointer';
+        notification.title = 'Clique para fechar';
         // Remove any existing notification
         const existingNotification = document.querySelector('.notification');
         if (existingNotification) {
             existingNotification.remove();
         }
-
         document.body.appendChild(notification);
-
-        // For error messages, keep them visible longer
-        const timeout = type === 'error' ? 5000 : 3000;
-        setTimeout(() => {
-            notification.remove();
-        }, timeout);
+        // Permite fechar ao clicar
+        notification.onclick = () => notification.remove();
+        // Só remove automaticamente se não estiver com mouse em cima
+        let timeout;
+        const removeIfNotHovered = () => {
+            if (!notification.matches(':hover')) notification.remove();
+        };
+        notification.addEventListener('mouseenter', () => {
+            if (timeout) clearTimeout(timeout);
+        });
+        notification.addEventListener('mouseleave', () => {
+            timeout = setTimeout(removeIfNotHovered, type === 'error' ? 5000 : 3000);
+        });
+        timeout = setTimeout(removeIfNotHovered, type === 'error' ? 5000 : 3000);
     }
 }
 
